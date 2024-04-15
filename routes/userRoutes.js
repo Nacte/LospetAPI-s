@@ -11,4 +11,7 @@ router.get('/verify-email/:token', userController.verifyEmail);
 // // Login users
 router.post('/login', userController.loginUser);
 
+// Forgot password
+router.post('/forgot-password', userController.forgotPassword);
+
 module.exports = router;

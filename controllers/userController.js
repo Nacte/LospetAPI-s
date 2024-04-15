@@ -2,7 +2,11 @@ const User = require('../Models/users');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-const sendRegistrationEmail = require('../services/mailService');
+const {
+  sendRegistrationEmail,
+  sendResetLink,
+} = require('../services/mailService');
+const crypto = require('crypto');
 
 // Load environment variables from config.env file
 dotenv.config({ path: './config.env' });
@@ -121,5 +125,35 @@ exports.loginUser = async (req, res, next) => {
     res.json({ message: 'Login successful', token });
   } catch (error) {
     next(error);
+  }
+};
+
+// Forgot Password logic
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    // Check if the email exists in the db
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: 'User with that email does not exist!' });
+    }
+
+    // Generate reset token and expiry date
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    const resetTokenExpires = Date.now() + 3600000; //1hour
+
+    // Save token and expiry date to the user
+    user.resetToken = resetToken;
+    user.resetTokenExpires = resetTokenExpires;
+    await user.save();
+    // Send reset link via email
+    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+    await sendResetLink(email, resetLink);
+    res.status(200).json({ message: 'Reset link sent to your email' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };

@@ -3,11 +3,10 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: './config.env' });
 
-// Function to send registration email with verification link
-
-const sendRegistrationEmail = async (token, email) => {
+// Function to create a transporter
+const createTransporter = () => {
   // Create transporter using Mailtrap SMTP settings
-  const transporter = nodemailer.createTransport({
+  return nodemailer.createTransport({
     host: 'sandbox.smtp.mailtrap.io',
     port: 2525,
     auth: {
@@ -15,6 +14,12 @@ const sendRegistrationEmail = async (token, email) => {
       pass: process.env.MAILTRAP_PASSWORD,
     },
   });
+};
+
+// Function to send registration email with verification link
+
+const sendRegistrationEmail = async (token, email) => {
+  const transporter = createTransporter();
 
   // verification link
   const verificationLink = `http://localhost:3000/verify-email/${token}`;
@@ -34,4 +39,18 @@ const sendRegistrationEmail = async (token, email) => {
   await transporter.sendMail(mailOptions);
 };
 
-module.exports = sendRegistrationEmail;
+// Function to send reset link via email
+const sendResetLink = async (email, resetLink) => {
+  const transporter = createTransporter();
+
+  // Email options
+  const mailOptions = {
+    from: 'lospet@lospet.com',
+    to: email,
+    subject: 'Password Rest',
+    html: ` It seems that you have forgotten your password please click <a href="${resetLink}">here</a> to reset your password`,
+  };
+  await transporter.sendMail(mailOptions);
+};
+
+module.exports = { sendRegistrationEmail, sendResetLink };
