@@ -18,11 +18,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password_confirmation: {
-    type: String,
-  },
   remember_token: {
     type: String,
+    default: null,
+  },
+  reset_token: {
+    type: String,
+    default: null,
+  },
+  reset_token_expires: {
+    type: Date,
     default: null,
   },
   created_at: {

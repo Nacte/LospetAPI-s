@@ -22,7 +22,7 @@ const sendRegistrationEmail = async (token, email) => {
   const transporter = createTransporter();
 
   // verification link
-  const verificationLink = `http://localhost:3000/verify-email/${token}`;
+  const verificationLink = `${process.env.BACKEND_URL}/verify-email/${token}`;
 
   //   Email options
   const mailOptions = {
@@ -40,7 +40,9 @@ const sendRegistrationEmail = async (token, email) => {
 };
 
 // Function to send reset link via email
-const sendResetLink = async (email, resetLink) => {
+const sendResetLink = async (email, resetToken) => {
+  console.log(resetToken);
+  const resetLink = `http://localhost:5173/password-reset/${resetToken}`;
   const transporter = createTransporter();
 
   // Email options
@@ -48,7 +50,7 @@ const sendResetLink = async (email, resetLink) => {
     from: 'lospet@lospet.com',
     to: email,
     subject: 'Password Rest',
-    html: ` It seems that you have forgotten your password please click <a href="${resetLink}">here</a> to reset your password`,
+    html: ` It seems that you have forgotten your password please click <a href="${resetLink}">${resetLink}</a> to reset your password`,
   };
   await transporter.sendMail(mailOptions);
 };

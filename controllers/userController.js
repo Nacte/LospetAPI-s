@@ -128,7 +128,7 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
-// Forgot Password logic
+// Forgot Password
 exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -145,13 +145,68 @@ exports.forgotPassword = async (req, res, next) => {
     const resetTokenExpires = Date.now() + 3600000; //1hour
 
     // Save token and expiry date to the user
-    user.resetToken = resetToken;
-    user.resetTokenExpires = resetTokenExpires;
+    user.reset_token = resetToken;
+    user.reset_token_expires = resetTokenExpires;
     await user.save();
     // Send reset link via email
-    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
-    await sendResetLink(email, resetLink);
+    await sendResetLink(email, resetToken);
     res.status(200).json({ message: 'Reset link sent to your email' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
+//Reset Password
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { token, password, password_confirmation } = req.body;
+
+    // Check if token, email, newPassword and password_confirmation are provided
+    if (!token || !password || !password_confirmation) {
+      return res.status(400).json({
+        message: 'Token,  new password, and password confirmation are required',
+      });
+    }
+
+    // Check if newPassword and confirmPassword match
+    if (password !== password_confirmation) {
+      return res.status(400).json({
+        message: 'New password and password_confirmation do not match',
+      });
+    }
+
+    // Find user by token
+    const user = await User.findOne({ reset_token: token });
+    console.log(user);
+
+    // If user not found or reset token expired
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: 'Invalid or expired reset token' });
+    }
+
+    // Check to see if the token is not expired
+    if (Date.toISOString < user.reset_token_expires) {
+      console.log(Date.toISOString);
+      console.log(user.reset_token_expires);
+      return res
+        .status(400)
+        .json({ message: 'Invalid or expired reset token' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Update user's password
+    user.password = hashedPassword;
+    user.reset_token = null;
+    user.reset_token_expires = null;
+    await user.save();
+
+    // Respond with success message
+    res.status(200).json({ message: 'Password reset successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
