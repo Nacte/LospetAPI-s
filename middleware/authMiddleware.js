@@ -2,11 +2,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../Models/users');
 
 // Middleware to protect routes that require authentication
-exports.protect = async (req, res, next) => {
+exports.authMiddleware = async (req, res, next) => {
   try {
     // Get token from headers
     const token = req.headers.authorization;
-
+    console.log(token);
     // Check if token exists
     if (!token) {
       return res

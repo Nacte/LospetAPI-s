@@ -38,3 +38,15 @@ exports.changePassword = async (req, res, next) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+
+exports.getUser = async (req, res, next) => {
+  // Extract the user ID from JWT token
+  const user = req.user;
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  return res.status(200).json({data: user});
+};
