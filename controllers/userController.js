@@ -212,3 +212,16 @@ exports.resetPassword = async (req, res, next) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+// Logout logic for Jwt authentication
+exports.logoutUser = async (req, res, next) => {
+  try {
+    // Clear JWT token from the request
+    delete req.headers['authorization'];
+    // Respond with success message
+    res.json({ message: 'Logout successful' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
