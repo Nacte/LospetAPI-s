@@ -6,7 +6,6 @@ exports.authMiddleware = async (req, res, next) => {
   try {
     // Get token from headers
     const token = req.headers.authorization;
-    console.log(token);
     // Check if token exists
     if (!token) {
       return res
@@ -24,7 +23,10 @@ exports.authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: 'User not found' });
     }
     // Attach user to request object
-    req.user = user;
+    req.user = {
+      name: user.name,
+      email: user.email
+    };
     // Proceed to next middleware
     next();
   } catch (error) {

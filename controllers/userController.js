@@ -7,55 +7,17 @@ const {
   sendResetLink,
 } = require('../services/mailService');
 const crypto = require('crypto');
+const {registerUserService} = require("../services/userService");
 
 // Load environment variables from config.env file
 dotenv.config({ path: './config.env' });
 
 // Function to register a new user
 exports.registerUser = async (req, res, next) => {
-  try {
-    // Extract user data from request body
-    const { name, email, password, password_confirmation } = req.body;
 
-    // Check if all required fields are provided
-    if (!email || !password || !password_confirmation) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
+  await registerUserService(req, res, next);
 
-    // Check if passwords match
-    if (password !== password_confirmation) {
-      return res.status(400).json({ error: 'Passwords do not match' });
-    }
 
-    // Check if the user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: 'An account with that email already exists' });
-    }
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    // Create a new user
-    const user = new User({ name, password: hashedPassword, email });
-    await user.save();
-
-    // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '24h',
-    });
-
-    // Send registration email with verification link
-    await sendRegistrationEmail(token, email);
-
-    // Respond with success message
-    res.status(201).json({
-      message:
-        'User registered successfully. Please check your email for verification.',
-    });
-  } catch (error) {
-    next(error);
-  }
 };
 
 // Function to verify user's email
