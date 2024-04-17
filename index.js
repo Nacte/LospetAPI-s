@@ -22,6 +22,9 @@ connectToDatabase();
 // mount user routes
 app.use('/', userRoutes);
 
+// mount account routes
+app.use('/api/account', userRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.log(err.stack);

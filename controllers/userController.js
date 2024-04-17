@@ -189,8 +189,6 @@ exports.resetPassword = async (req, res, next) => {
 
     // Check to see if the token is not expired
     if (Date.toISOString < user.reset_token_expires) {
-      console.log(Date.toISOString);
-      console.log(user.reset_token_expires);
       return res
         .status(400)
         .json({ message: 'Invalid or expired reset token' });
@@ -225,3 +223,5 @@ exports.logoutUser = async (req, res, next) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+
