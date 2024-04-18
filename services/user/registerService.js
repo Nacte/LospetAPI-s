@@ -1,7 +1,7 @@
 const User = require('../../Models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { sendRegistrationEmail } = require('../mailService');
+const { sendRegistrationEmail } = require('../mail/sendRegistrationEmail');
 const { httpCodes } = require('../../utils/response_codes');
 
 // Load environment variables from .env file

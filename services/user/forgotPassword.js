@@ -1,7 +1,8 @@
 const User = require('../../Models/users');
 const crypto = require('crypto');
 const { httpCodes } = require('../../utils/response_codes');
-const { sendResetLink } = require('../mailService');
+const { sendResetLink } = require('../mail/sendRegistrationEmail');
+const { msg } = require("../../utils/messages");
 
 exports.forgotPasswordService = async (req, res, next) => {
   try {
@@ -11,7 +12,7 @@ exports.forgotPasswordService = async (req, res, next) => {
     if (!user) {
       return res
         .status(httpCodes.HTTP_NOT_FOUND)
-        .json({ message: 'User with that email does not exist!' });
+        .json({ message: msg.en.USER_DOES_NOT_EXIST });
     }
 
     // Generate reset token and expiry date
@@ -26,11 +27,11 @@ exports.forgotPasswordService = async (req, res, next) => {
     await sendResetLink(email, resetToken);
     res
       .status(httpCodes.HTTP_OK)
-      .json({ message: 'Reset link sent to your email' });
+      .json({ message: msg.en.RESET_LINK_SENT });
   } catch (error) {
     console.error(error);
     res
       .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
-      .json({ message: 'Internal Server Error' });
+      .json({ message: msg.en.INTERNAL_SERVER_ERROR });
   }
 };

@@ -2,9 +2,10 @@ const User = require('../Models/users');
 const dotenv = require('dotenv');
 const { registerService } = require('../services/user/registerService');
 const { loginService } = require('../services/user/login');
-const { verifyEmailService } = require('../services/verifyEmail');
+const { verifyEmailService } = require('../services/user/verifyEmail');
 const { forgotPasswordService } = require('../services/user/forgotPassword');
 const { resetPasswordService } = require('../services/user/resetPassword');
+const {httpCodes} = require("../utils/response_codes");
 
 // Load environment variables from config.env file
 dotenv.config({ path: './config.env' });
@@ -21,7 +22,15 @@ exports.verifyEmail = async (req, res, next) => {
 
 // Function to login a user
 exports.loginUser = async (req, res, next) => {
-  await loginService(req, res, next);
+  try {
+    const response = await loginService(req);
+
+    return res
+        .status(response.code)
+        .json(response.data);
+  } catch (error) {
+    next(error);
+  }
 };
 
 //  Function for Forgot Password
