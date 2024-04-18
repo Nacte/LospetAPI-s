@@ -4,7 +4,6 @@ const userRoutes = require('./routes/userRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors');
-const { httpCodes } = require('../utils/response_codes');
 
 // Middleware for JSON parsing
 app.use(express.json());
@@ -29,9 +28,7 @@ app.use('/api/account', userRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.log(err.stack);
-  res
-    .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
-    .send('Something went wrong!');
+  res.status(500).send('Something went wrong!');
 });
 
 // Start the server
