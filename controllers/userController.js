@@ -2,13 +2,11 @@ const User = require('../Models/users');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-const {
-  sendRegistrationEmail,
-  sendResetLink,
-} = require('../services/mailService');
 const crypto = require('crypto');
 const { registerUserService } = require('../services/userService');
 const { httpCodes } = require('../utils/response_codes');
+const { verifyEmailService } = require('../services/verifyEmailService');
+const { loginUserService } = require('../services/loginUserService');
 
 // Load environment variables from config.env file
 dotenv.config({ path: './config.env' });
@@ -20,76 +18,16 @@ exports.registerUser = async (req, res, next) => {
 
 // Function to verify user's email
 exports.verifyEmail = async (req, res, next) => {
-  try {
-    const { token } = req.params;
-
-    // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    // Find the user by id
-    const user = await User.findById(decoded.userId);
-
-    // Check if the user exists
-    if (!user) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: 'Invalid verification link' });
-    }
-
-    if (user.email_verified_at !== null) {
-      return res.status(httpCodes.HTTP_BAD_REQUEST).json({ message: 'The link is not valid anymore' });
-    }
-
-    // Update user's email verification status
-    const currentTime = new Date(Date.now()).toISOString();
-    user.email_verified_at = currentTime;
-    await user.save();
-
-    // Respond and redirect to dashboard
-
-    res.redirect(httpCodes.HTTP_MOVED_PERMANENTLY, process.env.FRONTEND_URL + '/login');
-  } catch (error) {
-    next(error);
-  }
+  await verifyEmailService(req, res, next);
 };
+
+// Function to login a user
 
 exports.loginUser = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    //Find user my email
-    const user = await User.findOne({ email });
-
-    //Check if user exists
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    // Compare passwords
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(httpCodes.HTTP_UNAUTHORIZED).json({ message: 'Invalid credentials' });
-    }
-
-    // Check if the email_verified_at column === null, if yes account is not activated
-    if (!user.email_verified_at === null) {
-      return res.status(httpCodes.HTTP_BAD_REQUEST).json({
-        message: 'Your account is not activated, please check your email',
-      });
-    }
-
-    //User is authenticated return JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '24h',
-    });
-
-    // Return JWT token in response
-    res.json({ message: 'Login successful', token });
-  } catch (error) {
-    next(error);
-  }
+  await loginUserService(req, res, next);
 };
 
-// Forgot Password
+//  Function for Forgot Password
 exports.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -111,14 +49,18 @@ exports.forgotPassword = async (req, res, next) => {
     await user.save();
     // Send reset link via email
     await sendResetLink(email, resetToken);
-    res.status(httpCodes.HTTP_OK).json({ message: 'Reset link sent to your email' });
+    res
+      .status(httpCodes.HTTP_OK)
+      .json({ message: 'Reset link sent to your email' });
   } catch (error) {
     console.error(error);
-    res.status(httpCodes.HTTP_INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+    res
+      .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
+      .json({ message: 'Internal Server Error' });
   }
 };
 
-//Reset Password
+// Function for Reset Password
 exports.resetPassword = async (req, res, next) => {
   try {
     const { token, password, password_confirmation } = req.body;
@@ -165,10 +107,14 @@ exports.resetPassword = async (req, res, next) => {
     await user.save();
 
     // Respond with success message
-    res.status(httpCodes.HTTP_OK).json({ message: 'Password reset successfully' });
+    res
+      .status(httpCodes.HTTP_OK)
+      .json({ message: 'Password reset successfully' });
   } catch (error) {
     console.error(error);
-    res.status(httpCodes.HTTP_INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+    res
+      .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
+      .json({ message: 'Internal Server Error' });
   }
 };
 
@@ -181,6 +127,8 @@ exports.logoutUser = async (req, res, next) => {
     res.json({ message: 'Logout successful' });
   } catch (error) {
     console.log(error);
-    res.status(httpCodes.HTTP_INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+    res
+      .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
+      .json({ message: 'Internal Server Error' });
   }
 };
