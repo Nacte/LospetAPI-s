@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 const accountController = require('../controllers/accountController');
-const { authMiddleware } = require('../middleware/authMiddleware');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Register for registering a new user
 router.post('/register', userController.registerUser);
@@ -20,11 +20,15 @@ router.post('/forgot-password', userController.forgotPassword);
 router.post('/reset-password', userController.resetPassword);
 
 // Logout user
-router.post('/logout', userController.logoutUser);
+// router.post('/logout', userController.logoutUser);
 
-// Put request to change the password
-router.put('/change-password', authMiddleware, accountController.changePassword);
+// // Put request to change the password
+// router.put(
+//   '/change-password',
+//   authMiddleware,
+//   accountController.changePassword
+// );
 
-router.get('/api/user', authMiddleware, accountController.getUser);
+// router.get('/api/user', authMiddleware, accountController.getUser);
 
 module.exports = router;

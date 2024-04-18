@@ -1,6 +1,6 @@
-const User = require('../Models/users');
+const User = require('../../Models/users');
 const bcrypt = require('bcryptjs');
-const { httpCodes } = require('../utils/response_codes');
+const { httpCodes } = require('../../utils/response_codes');
 
 exports.resetPasswordService = async (req, res, next) => {
   try {

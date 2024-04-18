@@ -1,7 +1,7 @@
-const User = require('../Models/users');
+const User = require('../../Models/users');
 const crypto = require('crypto');
-const { httpCodes } = require('../utils/response_codes');
-const { sendResetLink } = require('../services/mailService');
+const { httpCodes } = require('../../utils/response_codes');
+const { sendResetLink } = require('../mailService');
 
 exports.forgotPasswordService = async (req, res, next) => {
   try {

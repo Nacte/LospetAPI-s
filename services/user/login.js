@@ -1,7 +1,7 @@
-const User = require('../Models/users');
+const User = require('../../Models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { httpCodes } = require('../utils/response_codes');
+const { httpCodes } = require('../../utils/response_codes');
 
 // Load environment variables from .env file
 require('dotenv').config();

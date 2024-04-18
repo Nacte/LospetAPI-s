@@ -37,7 +37,9 @@ exports.changePassword = async (req, res, next) => {
     user.password = hashedPassword;
     await user.save();
     // Respond with success message
-    res.status(httpCodes.HTTP_OK).json({ message: 'Password changed successfully' });
+    res
+      .status(httpCodes.HTTP_OK)
+      .json({ message: 'Password changed successfully' });
   } catch (error) {
     console.error(error);
     res
@@ -51,7 +53,9 @@ exports.getUser = async (req, res, next) => {
   const user = req.user;
 
   if (!user) {
-    return res.status(httpCodes.HTTP_NOT_FOUND).json({ message: 'User not found' });
+    return res
+      .status(httpCodes.HTTP_NOT_FOUND)
+      .json({ message: 'User not found' });
   }
 
   return res.status(httpCodes.HTTP_OK).json({ data: user });

@@ -1,13 +1,12 @@
 const User = require('../Models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { sendRegistrationEmail } = require('./mailService');
 const { httpCodes } = require('../utils/response_codes');
 
 // Load environment variables from .env file
 require('dotenv').config();
 
-exports.verifyEmailServices = async (req, res, next) => {
+exports.verifyEmailService = async (req, res, next) => {
   try {
     const { token } = req.params;
 
