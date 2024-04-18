@@ -7,7 +7,7 @@ const { httpCodes } = require('../utils/response_codes');
 // Load environment variables from .env file
 require('dotenv').config();
 
-exports.registerUserService = async (req, res, next) => {
+exports.registerService = async (req, res, next) => {
   // Extract user data from request body
   const { name, email, password, password_confirmation } = req.body;
 

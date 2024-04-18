@@ -6,7 +6,7 @@ const { httpCodes } = require('../utils/response_codes');
 // Load environment variables from .env file
 require('dotenv').config();
 
-exports.loginUserService = async (req, res, next) => {
+exports.loginService = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     //Find user my email

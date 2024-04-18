@@ -2,18 +2,18 @@ const User = require('../Models/users');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const { httpCodes } = require('../utils/response_codes');
-const { registerUserService } = require('../services/userService');
-const { loginUserService } = require('../services/loginUser');
-const { verifyEmailService } = require('../services/verifyEmail');
-const { forgotPasswordService } = require('../services/forgotPassword');
-const { resetPasswordService } = require('../services/resetPassword');
+const { registerService } = require('../services/user/registerService');
+const { loginUserService } = require('../services/user/login');
+const { verifyEmailService } = require('../services/user/verifyEmail');
+const { forgotPasswordService } = require('../services/user/forgotPassword');
+const { resetPasswordService } = require('../services/user/resetPassword');
 
 // Load environment variables from config.env file
 dotenv.config({ path: './config.env' });
 
 // Function to register a new user
 exports.registerUser = async (req, res, next) => {
-  await registerUserService(req, res, next);
+  await registerService(req, res, next);
 };
 
 // Function to verify user's email
