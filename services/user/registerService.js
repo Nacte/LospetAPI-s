@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { sendRegistrationEmail } = require('../mail/sendRegistrationEmail');
 const { httpCodes } = require('../../utils/response_codes');
-const {.msg } = require('../../utils/messages');
+const { msg } = require('../../utils/messages');
 
 // Load environment variables from .env file
 require('dotenv').config();
@@ -50,8 +50,7 @@ exports.registerService = async (req, res, next) => {
 
     // Respond with success message
     res.status(httpCodes.HTTP_CREATED).json({
-      message:msg.en.USER_CREATED
-        ,
+      message: msg.en.USER_CREATED,
     });
   } catch (error) {
     next(error);

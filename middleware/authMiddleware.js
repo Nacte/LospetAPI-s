@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../Models/users');
 const { httpCodes } = require('../utils/response_codes');
-const {.msg } = require('../utils/messages');
+const { msg } = require('../utils/messages');
 
 // Middleware to protect routes that require authentication
 exports.authMiddleware = async (req, res, next) => {
@@ -35,6 +35,8 @@ exports.authMiddleware = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
-    res.status(httpCodes.HTTP_UNAUTHORIZED).json({ message: msg.en.INVALID_TOKEN });
+    res
+      .status(httpCodes.HTTP_UNAUTHORIZED)
+      .json({ message: msg.en.INVALID_TOKEN });
   }
 };

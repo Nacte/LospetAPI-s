@@ -1,7 +1,7 @@
 const User = require('../Models/users');
 const bcrypt = require('bcryptjs');
 const { httpCodes } = require('../utils/response_codes');
-const {.msg } = require('../utils/messages');
+const { msg } = require('../utils/messages');
 
 exports.changePassword = async (req, res, next) => {
   try {
@@ -38,9 +38,7 @@ exports.changePassword = async (req, res, next) => {
     user.password = hashedPassword;
     await user.save();
     // Respond with success message
-    res
-      .status(httpCodes.HTTP_OK)
-      .json({ message: msg.en.PASSWORD_CHANGED });
+    res.status(httpCodes.HTTP_OK).json({ message: msg.en.PASSWORD_CHANGED });
   } catch (error) {
     console.error(error);
     res
