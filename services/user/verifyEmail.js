@@ -2,6 +2,7 @@ const User = require('../../Models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { httpCodes } = require('../../utils/response_codes');
+const { msg } = require('../../utils/messages');
 
 // Load environment variables from .env file
 require('dotenv').config();
@@ -20,13 +21,13 @@ exports.verifyEmailService = async (req, res, next) => {
     if (!user) {
       return res
         .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: 'Invalid verification link' });
+        .json({ message: msg.en.INVALID_LINK });
     }
 
     if (user.email_verified_at !== null) {
       return res
         .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: 'The link is not valid anymore' });
+        .json({ message: msg.en.INVALID_LINK_ANYMORE });
     }
 
     // Update user's email verification status

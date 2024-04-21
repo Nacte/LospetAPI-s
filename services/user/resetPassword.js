@@ -1,6 +1,7 @@
 const User = require('../../Models/users');
 const bcrypt = require('bcryptjs');
 const { httpCodes } = require('../../utils/response_codes');
+const {.msg } = require('../../utils/messages');
 
 exports.resetPasswordService = async (req, res, next) => {
   try {
@@ -9,14 +10,14 @@ exports.resetPasswordService = async (req, res, next) => {
     // Check if token, email, newPassword and password_confirmation are provided
     if (!token || !password || !password_confirmation) {
       return res.status(httpCodes.HTTP_BAD_REQUEST).json({
-        message: 'Token,  new password, and password confirmation are required',
+        message: msg.en.REQUIRED_FIELDS,
       });
     }
 
     // Check if newPassword and confirmPassword match
     if (password !== password_confirmation) {
       return res.status(httpCodes.HTTP_BAD_REQUEST).json({
-        message: 'New password and password_confirmation do not match',
+        message: msg.en.NO_MATCH,
       });
     }
 
@@ -28,14 +29,14 @@ exports.resetPasswordService = async (req, res, next) => {
     if (!user) {
       return res
         .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: 'Invalid or expired reset token' });
+        .json({ message: msg.en.INVALID_TOKEN });
     }
 
     // Check to see if the token is not expired
     if (Date.toISOString < user.reset_token_expires) {
       return res
         .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: 'Invalid or expired reset token' });
+        .json({ message: msg.en.INVALID_TOKEN });
     }
 
     // Hash the new password
@@ -50,11 +51,11 @@ exports.resetPasswordService = async (req, res, next) => {
     // Respond with success message
     res
       .status(httpCodes.HTTP_OK)
-      .json({ message: 'Password reset successfully' });
+      .json({ message: msg.en.PASSWORD_RESET });
   } catch (error) {
     console.error(error);
     res
       .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
-      .json({ message: 'Internal Server Error' });
+      .json({ message: msg.en.INTERNAL_SERVER_ERROR });
   }
 };

@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { sendRegistrationEmail } = require('../mail/sendRegistrationEmail');
 const { httpCodes } = require('../../utils/response_codes');
+const {.msg } = require('../../utils/messages');
 
 // Load environment variables from .env file
 require('dotenv').config();
@@ -15,14 +16,14 @@ exports.registerService = async (req, res, next) => {
   if (!email || !password || !password_confirmation) {
     return res
       .status(httpCodes.HTTP_BAD_REQUEST)
-      .json({ message: 'All fields are required' });
+      .json({ message: msg.en.ALL_REQUIRED });
   }
 
   // Check if passwords match
   if (password !== password_confirmation) {
     return res
       .status(httpCodes.HTTP_BAD_REQUEST)
-      .json({ error: 'Passwords do not match' });
+      .json({ error: msg.en.NO_MATCH });
   }
 
   try {
@@ -31,7 +32,7 @@ exports.registerService = async (req, res, next) => {
     if (existingUser) {
       return res
         .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: 'An account with that email already exists' });
+        .json({ message: msg.en.DUPLICATE_EMAIL });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -49,8 +50,8 @@ exports.registerService = async (req, res, next) => {
 
     // Respond with success message
     res.status(httpCodes.HTTP_CREATED).json({
-      message:
-        'User registered successfully. Please check your email for verification.',
+      message:msg.en.USER_CREATED
+        ,
     });
   } catch (error) {
     next(error);

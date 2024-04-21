@@ -1,6 +1,7 @@
 const User = require('../Models/users');
 const bcrypt = require('bcryptjs');
 const { httpCodes } = require('../utils/response_codes');
+const {.msg } = require('../utils/messages');
 
 exports.changePassword = async (req, res, next) => {
   try {
@@ -14,7 +15,7 @@ exports.changePassword = async (req, res, next) => {
     if (new_password !== confirm_password) {
       return res
         .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: 'New password and confirmation do not match' });
+        .json({ message: msg.en.NO_MATCH });
     }
     // Find the user by ID
     const user = await User.findById(userId);
@@ -22,14 +23,14 @@ exports.changePassword = async (req, res, next) => {
     if (!user) {
       return res
         .status(httpCodes.HTTP_NOT_FOUND)
-        .json({ message: 'User not found' });
+        .json({ message: msg.en.USER_NOT_FOUND });
     }
     // Check if old password is correct
     const isMatch = await bcrypt.compare(old_password, user.password);
     if (!isMatch) {
       return res
         .status(httpCodes.HTTP_UNAUTHORIZED)
-        .json({ message: 'Current password is incorrect' });
+        .json({ message: msg.en.PASSWORD_INCORRECT });
     }
     // Hash the new password
     const hashedPassword = await bcrypt.hash(new_password, 12);
@@ -39,12 +40,12 @@ exports.changePassword = async (req, res, next) => {
     // Respond with success message
     res
       .status(httpCodes.HTTP_OK)
-      .json({ message: 'Password changed successfully' });
+      .json({ message: msg.en.PASSWORD_CHANGED });
   } catch (error) {
     console.error(error);
     res
       .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
-      .json({ message: 'Internal Server Error' });
+      .json({ message: msg.en.INTERNAL_SERVER_ERROR });
   }
 };
 
@@ -55,7 +56,7 @@ exports.getUser = async (req, res, next) => {
   if (!user) {
     return res
       .status(httpCodes.HTTP_NOT_FOUND)
-      .json({ message: 'User not found' });
+      .json({ message: msg.en.USER_NOT_FOUND });
   }
 
   return res.status(httpCodes.HTTP_OK).json({ data: user });

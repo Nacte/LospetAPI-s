@@ -2,6 +2,7 @@ const User = require('../../Models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { httpCodes } = require('../../utils/response_codes');
+const {.msg } = require('../../utils/messages');
 
 // Load environment variables from .env file
 require('dotenv').config();
@@ -16,7 +17,7 @@ exports.loginService = async (req) => {
     return {
       code: httpCodes.HTTP_UNAUTHORIZED,
       data: {
-        message: 'Invalid credentials'
+        message: msg.en.INVALID_CREDENTIALS
       }
     }
   }
@@ -27,7 +28,7 @@ exports.loginService = async (req) => {
     return {
       code: httpCodes.HTTP_UNAUTHORIZED,
       data: {
-        message: 'Invalid credentials'
+        message: msg.en.INVALID_CREDENTIALS
       }
     }
   }
@@ -37,7 +38,7 @@ exports.loginService = async (req) => {
     return {
       code: httpCodes.HTTP_BAD_REQUEST,
       data: {
-        message: 'Your account is not activated, please check your email'
+        message: msg.en.ACCOUNT_NOT_ACTIVE
       }
     }
   }
@@ -50,8 +51,7 @@ exports.loginService = async (req) => {
   // Return JWT token in response
   return {
     code: httpCodes.HTTP_OK,
-    data: {
-      message: 'Login successful',
+    data: {msg.en.SUCCESSFUL_LOGIN,
       token: token
     }
   }
