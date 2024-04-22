@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { httpCodes } = require('../../utils/response_codes');
 const { msg } = require('../../utils/messages');
+const cookie = require('cookie');
 
 // Load environment variables from .env file
 require('dotenv').config();
@@ -48,10 +49,15 @@ exports.loginService = async (req, res) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
-  res.cookie(`user_${user._id}`, token, {
+  //add to cookie
+  const serialized = cookie.serialize('token', token, {
     httpOnly: true,
-    maxAge: process.env.JWT_EXPIRES_IN * 1000,
+    secure: 'production',
+    sameSite: 'strict',
+    maxAge: 60 * 60 * 24 * 30,
+    path: '/',
   });
+  res.setHeader('Set-Cookie', serialized);
 
   // Return JWT token in response
   return {

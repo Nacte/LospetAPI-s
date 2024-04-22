@@ -14,11 +14,9 @@ const authMiddleware = async (req, res, next) => {
         .status(httpCodes.HTTP_UNAUTHORIZED)
         .json({ message: msg.en.NO_AUTHORIZATION });
     }
-    console.log('uite  asta e tot stringul => ' + token);
+
     // Verify token
-    console.log(process.env.JWT_SECRET);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
 
     // Find user by ID
     const user = await User.findById(decoded.userId);
