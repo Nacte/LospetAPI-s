@@ -29,6 +29,6 @@ router.post('/logout', authMiddleware, userController.logoutUser);
 //   accountController.changePassword
 // );
 
-// router.get('/api/user', authMiddleware, accountController.getUser);
+router.get('/api/user', authMiddleware, accountController.getUser);
 
 module.exports = router;
