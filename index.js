@@ -4,9 +4,13 @@ const userRoutes = require('./routes/userRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 // Middleware for JSON parsing
 app.use(express.json());
+
+// Cookie parsing middleware
+app.use(cookieParser());
 
 // Cors for all routes
 app.use(

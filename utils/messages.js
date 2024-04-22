@@ -16,6 +16,7 @@ exports.msg = {
     ACCOUNT_NOT_ACTIVE:
       'Your account is not activated, please check your email',
     SUCCESSFUL_LOGIN: 'Login successful',
+    USER_LOGOUT: 'Logged out successfully',
     ALL_REQUIRED: 'All fields are required',
     DUPLICATE_EMAIL: 'An account with that email already exists',
     USER_CREATED:

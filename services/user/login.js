@@ -7,7 +7,7 @@ const { msg } = require('../../utils/messages');
 // Load environment variables from .env file
 require('dotenv').config();
 
-exports.loginService = async (req) => {
+exports.loginService = async (req, res) => {
   const { email, password } = req.body;
   //Find user my email
   const user = await User.findOne({ email });
@@ -46,6 +46,11 @@ exports.loginService = async (req) => {
   //User is authenticated return JWT token
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  res.cookie('jwt', token, {
+    httpOnly: true,
+    maxAge: process.env.JWT_EXPIRES_IN * 1000,
   });
 
   // Return JWT token in response

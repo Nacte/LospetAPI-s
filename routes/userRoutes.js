@@ -20,7 +20,7 @@ router.post('/forgot-password', userController.forgotPassword);
 router.post('/reset-password', userController.resetPassword);
 
 // Logout user
-// router.post('/logout', userController.logoutUser);
+router.post('/logout', userController.logoutUser);
 
 // // Put request to change the password
 // router.put(

@@ -5,7 +5,7 @@ const { loginService } = require('../services/user/login');
 const { verifyEmailService } = require('../services/user/verifyEmail');
 const { forgotPasswordService } = require('../services/user/forgotPassword');
 const { resetPasswordService } = require('../services/user/resetPassword');
-const { httpCodes } = require('../utils/response_codes');
+const { logoutService } = require('../services/user/logout');
 
 // Load environment variables from config.env file
 dotenv.config({ path: './config.env' });
@@ -35,7 +35,7 @@ exports.verifyEmail = async (req, res, next) => {
 // Function to login a user
 exports.loginUser = async (req, res, next) => {
   try {
-    const response = await loginService(req);
+    const response = await loginService(req, res);
 
     return res.status(response.code).json(response.data);
   } catch (error) {
@@ -65,17 +65,13 @@ exports.resetPassword = async (req, res, next) => {
   }
 };
 
-// // Logout logic for Jwt authentication
-// exports.logoutUser = async (req, res, next) => {
-//   try {
-//     // Clear JWT token from the request
-//     delete req.headers['authorization'];
-//     // Respond with success message
-//     res.json({ message: 'Logout successful' });
-//   } catch (error) {
-//     console.log(error);
-//     res
-//       .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
-//       .json({ message: 'Internal Server Error' });
-//   }
-// };
+// Logout function
+exports.logoutUser = async (req, res, next) => {
+  try {
+    const response = await logoutService(req, res);
+
+    return res.status(response.code).json(response.data);
+  } catch (error) {
+    next(error);
+  }
+};
