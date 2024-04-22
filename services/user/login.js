@@ -48,7 +48,7 @@ exports.loginService = async (req, res) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
-  res.cookie('jwt', token, {
+  res.cookie(`user_${user._id}`, token, {
     httpOnly: true,
     maxAge: process.env.JWT_EXPIRES_IN * 1000,
   });
