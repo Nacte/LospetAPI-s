@@ -19,15 +19,17 @@ exports.verifyEmailService = async (req, res, next) => {
 
     // Check if the user exists
     if (!user) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: msg.en.INVALID_LINK });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.INVALID_LINK },
+      };
     }
 
     if (user.email_verified_at !== null) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: msg.en.INVALID_LINK_ANYMORE });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.INVALID_LINK_ANYMORE },
+      };
     }
 
     // Update user's email verification status

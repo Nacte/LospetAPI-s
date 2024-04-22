@@ -14,25 +14,28 @@ exports.registerService = async (req, res, next) => {
 
   // Check if all required fields are provided
   if (!email || !password || !password_confirmation) {
-    return res
-      .status(httpCodes.HTTP_BAD_REQUEST)
-      .json({ message: msg.en.ALL_REQUIRED });
+    return {
+      code: httpCodes.HTTP_BAD_REQUEST,
+      data: { message: msg.en.ALL_REQUIRED },
+    };
   }
 
   // Check if passwords match
   if (password !== password_confirmation) {
-    return res
-      .status(httpCodes.HTTP_BAD_REQUEST)
-      .json({ error: msg.en.NO_MATCH });
+    return {
+      code: httpCodes.HTTP_BAD_REQUEST,
+      data: { error: msg.en.NO_MATCH },
+    };
   }
 
   try {
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: msg.en.DUPLICATE_EMAIL });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.DUPLICATE_EMAIL },
+      };
     }
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -49,10 +52,13 @@ exports.registerService = async (req, res, next) => {
     await sendRegistrationEmail(token, email);
 
     // Respond with success message
-    res.status(httpCodes.HTTP_CREATED).json({
-      message: msg.en.USER_CREATED,
-    });
+    return {
+      code: httpCodes.HTTP_CREATED,
+      data: {
+        message: msg.en.USER_CREATED,
+      },
+    };
   } catch (error) {
-    next(error);
+    // next(error);
   }
 };

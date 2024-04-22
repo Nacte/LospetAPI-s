@@ -9,16 +9,22 @@ exports.resetPasswordService = async (req, res, next) => {
 
     // Check if token, email, newPassword and password_confirmation are provided
     if (!token || !password || !password_confirmation) {
-      return res.status(httpCodes.HTTP_BAD_REQUEST).json({
-        message: msg.en.REQUIRED_FIELDS,
-      });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: {
+          message: msg.en.REQUIRED_FIELDS,
+        },
+      };
     }
 
     // Check if newPassword and confirmPassword match
     if (password !== password_confirmation) {
-      return res.status(httpCodes.HTTP_BAD_REQUEST).json({
-        message: msg.en.NO_MATCH,
-      });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: {
+          message: msg.en.NO_MATCH,
+        },
+      };
     }
 
     // Find user by token
@@ -27,16 +33,18 @@ exports.resetPasswordService = async (req, res, next) => {
 
     // If user not found or reset token expired
     if (!user) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: msg.en.INVALID_TOKEN });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.INVALID_TOKEN },
+      };
     }
 
     // Check to see if the token is not expired
     if (Date.toISOString < user.reset_token_expires) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: msg.en.INVALID_TOKEN });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.INVALID_TOKEN },
+      };
     }
 
     // Hash the new password
@@ -49,11 +57,15 @@ exports.resetPasswordService = async (req, res, next) => {
     await user.save();
 
     // Respond with success message
-    res.status(httpCodes.HTTP_OK).json({ message: msg.en.PASSWORD_RESET });
+    return {
+      code: httpCodes.HTTP_OK,
+      data: { message: msg.en.PASSWORD_RESET },
+    };
   } catch (error) {
     console.error(error);
-    res
-      .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
-      .json({ message: msg.en.INTERNAL_SERVER_ERROR });
+    return {
+      code: httpCodes.HTTP_INTERNAL_SERVER_ERROR,
+      data: { message: msg.en.INTERNAL_SERVER_ERROR },
+    };
   }
 };
