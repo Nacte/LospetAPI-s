@@ -22,12 +22,12 @@ router.post('/reset-password', userController.resetPassword);
 // Logout user
 router.post('/logout', authMiddleware, userController.logoutUser);
 
-// // Put request to change the password
-// router.put(
-//   '/change-password',
-//   authMiddleware,
-//   accountController.changePassword
-// );
+// Put request to change the password
+router.put(
+  '/change-password',
+  authMiddleware,
+  accountController.changePassword
+);
 
 router.get('/api/user', authMiddleware, accountController.getUser);
 

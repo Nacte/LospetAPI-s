@@ -1,7 +1,11 @@
 const jwt = require('jsonwebtoken');
 const User = require('../Models/users');
+const dotenv = require('dotenv');
 const { httpCodes } = require('../utils/response_codes');
 const { msg } = require('../utils/messages');
+
+// Load environment variables from config.env file
+dotenv.config({ path: './config.env' });
 
 // Middleware to protect routes that require authentication
 const authMiddleware = async (req, res, next) => {
@@ -16,6 +20,7 @@ const authMiddleware = async (req, res, next) => {
     }
 
     // Verify token
+    console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Find user by ID
@@ -27,6 +32,7 @@ const authMiddleware = async (req, res, next) => {
         .status(httpCodes.HTTP_NOT_FOUND)
         .json({ message: msg.en.USER_NOT_FOUND });
     }
+
     // Attach user to request object
     req.user = {
       userId: user._id,
