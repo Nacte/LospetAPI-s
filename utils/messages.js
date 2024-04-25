@@ -3,6 +3,7 @@ exports.msg = {
     USER_DOES_NOT_EXIST: 'User with that email does not exist!',
     RESET_LINK_SENT: 'Reset link sent to your email',
     INTERNAL_SERVER_ERROR: 'Internal Server Error',
+    SERVER_ERROR: 'Something went wrong on the server side',
     NO_MATCH: 'New password and confirmation do not match',
     USER_NOT_FOUND: 'User not found!',
     PASSWORD_INCORRECT: 'Current password is incorrect',
