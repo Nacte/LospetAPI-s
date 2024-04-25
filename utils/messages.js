@@ -24,6 +24,7 @@ exports.msg = {
       'User registered successfully. Please check your email for verification.',
     CLIENT_CREATED: 'A new client has been created.',
     CLIENT_NOT_CREATED: 'Failed to create client',
+    CLIENT_NOT_FOUND: 'The client you are searching for does not exist',
     REQUIRED_FIELDS:
       'Token,  new password, and password confirmation are required',
   },

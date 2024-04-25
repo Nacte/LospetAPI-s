@@ -10,8 +10,9 @@ exports.getAllClientsService = async (req, res, next) => {
     // Respond with the list of clients
     return res.status(httpCodes.HTTP_OK).json(clients);
   } catch (error) {
-    return res
-      .status(httpCodes.HTTP_INTERNAL_SERVER_ERROR)
-      .json({ message: msg.en.SERVER_ERROR });
+    return {
+      code: httpCodes.HTTP_INTERNAL_SERVER_ERROR,
+      status: { message: msg.en.SERVER_ERROR },
+    };
   }
 };
