@@ -37,6 +37,7 @@ exports.verifyEmailService = async (req, res, next) => {
     user.email_verified_at = currentTime;
     await user.save();
 
+
     // Respond and redirect to dashboard
 
     res.redirect(

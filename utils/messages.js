@@ -4,6 +4,8 @@ exports.msg = {
     RESET_LINK_SENT: 'Reset link sent to your email',
     INTERNAL_SERVER_ERROR: 'Internal Server Error',
     SERVER_ERROR: 'Something went wrong on the server side',
+    GENERIC_ERROR:
+      'Oops! Something went wrong. Please try again later or contact support for assistance.',
     NO_MATCH: 'New password and confirmation do not match',
     USER_NOT_FOUND: 'User not found!',
     PASSWORD_INCORRECT: 'Current password is incorrect',
@@ -25,6 +27,8 @@ exports.msg = {
     CLIENT_CREATED: 'A new client has been created.',
     CLIENT_NOT_CREATED: 'Failed to create client',
     CLIENT_NOT_FOUND: 'The client you are searching for does not exist',
+    CLIENT_UPDATED: 'Client data updated successfully',
+    CLIENT_DELETED: 'Client successfully deleted',
     REQUIRED_FIELDS:
       'Token,  new password, and password confirmation are required',
   },

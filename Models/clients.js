@@ -32,7 +32,7 @@ const clientSchema = new mongoose.Schema({
   },
   updated_at: {
     type: Date,
-    default: null,
+    default: Date.now,
   },
   deleted_at: {
     type: Date,

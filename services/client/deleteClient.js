@@ -2,34 +2,27 @@ const Client = require('../../Models/clients');
 const { httpCodes } = require('../../utils/response_codes');
 const { msg } = require('../../utils/messages');
 
-exports.updateClientService = async (req, res) => {
+exports.deleteClientService = async (req, res) => {
   try {
     const clientId = req.params.clientId;
-    const updatedData = req.body;
 
-    // Find client by ID
-    const client = await Client.findById(clientId);
+    // Find client by ID and delete (if found)
+    const deleteClient = await Client.findByIdAndDelete(clientId);
 
     // Check if client exists
-    if (!client) {
+    if (!deleteClient) {
       return {
         code: httpCodes.HTTP_NOT_FOUND,
         status: { message: msg.en.CLIENT_NOT_FOUND },
       };
     }
-    // Update client data
-    Object.assign(client, updatedData);
-
-    // Save the updated client document
-    await client.save();
 
     return {
       code: httpCodes.HTTP_OK,
-      data: client,
-      status: { message: msg.en.CLIENT_UPDATED },
+      status: { message: msg.en.CLIENT_DELETED },
     };
   } catch (error) {
-    console.error('Error updating client', error);
+    console.error('Error deleting client', error);
     return {
       code: httpCodes.HTTP_INTERNAL_SERVER_ERROR,
       status: { message: msg.en.GENERIC_ERROR },
