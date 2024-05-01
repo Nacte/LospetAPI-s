@@ -2,6 +2,7 @@ const express = require('express');
 const connectToDatabase = require('./utils/database');
 const userRoutes = require('./routes/userRoutes');
 const clientRoutes = require('./routes/clientRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require('cors');
@@ -28,6 +29,9 @@ app.use('/api/account', userRoutes);
 
 // mount clients routes
 app.use('/api/', clientRoutes);
+
+// mount events routes
+app.use('/api', eventRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

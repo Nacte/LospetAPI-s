@@ -12,6 +12,8 @@ exports.msg = {
     PASSWORD_CHANGED: 'Password changed successfully',
     PASSWORD_RESET: 'Password reset successfully',
     NO_AUTHORIZATION: 'Not authorized to access this resource',
+    START_DATE: 'Start date must be before end date!',
+    INVALID_DATE: 'Invalid data format',
     INVALID_TOKEN: 'Invalid or expired token',
     INVALID_CREDENTIALS: 'Invalid credentials',
     INVALID_LINK: 'Invalid verification link',
@@ -31,5 +33,10 @@ exports.msg = {
     CLIENT_DELETED: 'Client successfully deleted',
     REQUIRED_FIELDS:
       'Token,  new password, and password confirmation are required',
+    EVENT_CREATED: 'An event has just been created!',
+    EVENT_NOT_CREATED: 'Failed to create event',
+    EVENT_NOT_FOUND: 'The event you are looking for does not exist',
+    EVENT_UPDATED: 'Event updated successfully',
+    EVENT_DELETED: 'Event successfully deleted',
   },
 };
