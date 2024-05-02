@@ -10,18 +10,26 @@ exports.createEventService = async (req, res) => {
     const { userId } = req.user.userId;
 
     if (!client_id || !name || !start_date || !end_date) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: msg.en.ALL_REQUIRED });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.ALL_REQUIRED },
+      };
     }
 
     // Check date format validity
     if (!isValidDate(start_date) || !isValidDate(end_date)) {
-      return res
-        .status(httpCodes.HTTP_BAD_REQUEST)
-        .json({ message: msg.en.INVALID_DATE });
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.INVALID_DATE },
+      };
     }
-
+    // Check if start date is before end date
+    if (start_date >= end_date) {
+      return {
+        code: httpCodes.HTTP_BAD_REQUEST,
+        data: { message: msg.en.START_DATE },
+      };
+    }
     // Create new event
     const event = await Event.create({
       company_id: userId,
@@ -31,9 +39,10 @@ exports.createEventService = async (req, res) => {
       end_date: new Date(end_date),
     });
     // Respond with the created event
-    return res
-      .status(httpCodes.HTTP_CREATED)
-      .json({ message: msg.en.EVENT_CREATED, event });
+    return {
+      code: httpCodes.HTTP_CREATED,
+      data: { message: msg.en.EVENT_CREATED, event },
+    };
   } catch (error) {
     console.error(error);
   }

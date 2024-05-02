@@ -7,7 +7,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.post('/events', authMiddleware, eventController.createEvent);
 
 // // Get all events
-// router.get('/events', authMiddleware, eventController.getAllEvents);
+router.get('/events', authMiddleware, eventController.getAllEvents);
 
 // // Get event by ID
 // router.get('/events/:eventId', authMiddleware, eventController.getEvent);
