@@ -10,12 +10,12 @@ router.post('/events', authMiddleware, eventController.createEvent);
 router.get('/events', authMiddleware, eventController.getAllEvents);
 
 // // Get event by ID
-// router.get('/events/:eventId', authMiddleware, eventController.getEvent);
+router.get('/events/:eventId', authMiddleware, eventController.getEvent);
 
 // // PUT (Update)  event by id
-// router.put('/events/:eventId', authMiddleware, eventController.updateEvent);
+router.put('/events/:eventId', authMiddleware, eventController.updateEvent);
 
 // // DEL (Delete) event by id
-// router.delete('/events/:eventId', authMiddleware, eventController.deleteEvent);
+router.delete('/events/:eventId', authMiddleware, eventController.deleteEvent);
 
 module.exports = router;
